@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Menu = () => {
@@ -11,37 +11,7 @@ const Menu = () => {
 							Inicio
 						</NavLink>
 					</li>
-					{/* <li className="nav-item">
-						{!user ? (
-							<NavLink to="/login" className="nav-link" >
-								Login
-							</NavLink>
-						) : (
-							<span></span>
-						)}
-					</li> */}
-					<li className="nav-item">
-						<NavLink className="nav-link" to="/search">
-							Buscar Heroe
-						</NavLink>
-					</li>
-					{/* <li className="nav-item">
-						{user ? (
-							<NavLink to="/Search" className="nav-link" >
-								Buscar Heroe
-							</NavLink>
-						) : (
-							<span></span>
-						)}
-					</li> */}
 				</ul>
-				{/* {user ? (
-					<button className="btn btn-danger m-3 position-absolute end-0">
-						Cerrar sesion
-					</button>
-				) : (
-					<span></span>
-				)} */}
 			</nav>
 		</div>
 	);

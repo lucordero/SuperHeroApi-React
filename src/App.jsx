@@ -1,23 +1,35 @@
-import React from "react";
-import Menu from "./components/Menu";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Search from "./components/Search";
-
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useState, useCallback } from "react";
+import SignupForm from "./components/Login";
 
 function App() {
+	const [tokenLogin, setTokenLogin] = useState(null);
+	// localStorage.removeItem("userLogin");
+	useCallback(() => {
+		setTokenLogin(localStorage.getItem("userLogin"));
+	});
+
+	const logOut = () => {
+		console.log("Me desloguie");
+		localStorage.removeItem("userLogin");
+		setTokenLogin(null);
+	};
 	return (
 		<div className="App">
-			<Router>
-				<Menu />
-				<Switch>
-					<Route exact path="/" component={Home}></Route>{" "}
-					{/*aca va a estar el equipo */}
-					<Route path="/login" component={Login}></Route>
-					<Route path="/search" component={Search}></Route>
-				</Switch>
-			</Router>
+			{tokenLogin ? (
+				<div className="navbar navbar-expand-lg navbar-dark">
+					<div className="container-fluid justify-content-start">
+						<button className="btn btn-danger m-1" onClick={logOut}>
+							Cerrar Sesion
+						</button>
+					</div>
+				</div>
+			) : (
+				<div>
+					<SignupForm />
+				</div>
+			)}
+
+			<div className="container"></div>
 		</div>
 	);
 }

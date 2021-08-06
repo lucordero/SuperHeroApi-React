@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Card from "./Card";
-import Error from "./Error";
+import Card from "./CardHero";
 
 const Search = () => {
-	const [id, setId] = useState(1); //lo saco del formik
+	const [id, setId] = useState(""); //lo saco del formik
 	const [name, setName] = useState(""); //lo saco del formik
-	const [hero, setHero] = useState({ response: "error" }); //lo saco de la api busqueda por id
+	const [hero, setHero] = useState({}); //lo saco de la api busqueda por id
 	const [heroes, setHeroes] = useState([]); //lo saco de la api busqueda por nombre
 	const [buscarxId, setBuscarxId] = useState(true);
+	const [isLoading, setisLoading] = useState(false);
 
 	const getHero = (e) => {
+		setisLoading(true);
+		e.preventDefault();
 		axios
 			.get(`https://superheroapi.com/api.php/4538936262791718/${id}`)
 			.then((resp) => {
-				setHero(resp.data);
+				if (resp.data.response === "success") {
+					setHero(resp.data);
+					setisLoading(false);
+				} else {
+					setHero({ response: "Heroe no encontrado" });
+					setisLoading(false);
+				}
 			})
-			.catch(<Error></Error>);
-		e.preventDefault();
+			.catch(setHero({ response: "error" }));
 	};
 	const getHeroes = (e) => {
 		axios
@@ -25,9 +32,11 @@ const Search = () => {
 			.then((resp) => {
 				if (resp.data.response === "success") {
 					setHeroes(resp.data.results);
+					setHero({ response: resp.data.response });
 				}
 			})
-			.catch(<Error></Error>);
+			.catch(setHero({ response: "error" }));
+
 		e.preventDefault();
 	};
 	const modoBusqueda = (e) => {
@@ -91,26 +100,27 @@ const Search = () => {
 				<div className="col"></div>
 			</div>
 			{buscarxId ? (
-				hero.response === "error" ? (
-					<Error></Error>
+				isLoading ? (
+					<div></div>
 				) : (
 					<div className="container">
 						<div className="row">
 							<div className="col"></div>
 							<div className="col">
+								{console.log(hero)}
 								<Card hero={hero} />
 							</div>
 							<div className="col"></div>
 						</div>
 					</div>
 				)
-			) : hero.response === "error" ? (
-				<Error></Error>
+			) : isLoading ? (
+				<div></div>
 			) : (
 				<div className="container">
 					<div className="row">
 						{heroes.map((i) => (
-							<div className="col">
+							<div className="col" key={i.id}>
 								<Card hero={i} />
 							</div>
 						))}
